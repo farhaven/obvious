@@ -14,10 +14,10 @@ local os = {
     getenv = os.getenv
 }
 local capi = {
-    widget = widget,
     mouse = mouse,
     screen = screen
 }
+local wibox = require("wibox")
 local awful = require("awful")
 local beautiful = require("beautiful")
 local naughty = require("naughty")
@@ -40,11 +40,7 @@ for key, value in pairs(defaults) do
     settings[key] = value
 end
 
-local widget = capi.widget({
-        type = "textbox",
-        name = "loadavg",
-        align = "right"
-    })
+local widget = wibox.widget.textbox()
 
 widget:buttons(awful.util.table.join(
     awful.button({ }, 1, function ()

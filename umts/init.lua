@@ -16,10 +16,10 @@ local io = {
     open = io.open
 }
 local capi = {
-	widget = widget,
 	mouse = mouse
 }
 
+local wibox = require("wibox")
 local naughty = require("naughty")
 local awful = require("awful")
 
@@ -30,12 +30,7 @@ local lib = {
 
 module("obvious.umts")
 
-widget = capi.widget({
-    type = "textbox",
-    name = "tb_umts",
-    align = "right"
-})
-
+local widget = wibox.widget.textbox()
 local fh = nil
 local cops = {}
 local cind = {}

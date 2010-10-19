@@ -5,9 +5,11 @@
 
 local setmetatable = setmetatable
 local tonumber = tonumber
+local tostring = tostring
 local pairs = pairs
 local io = {
-    popen = io.popen
+    popen = io.popen,
+    stderr = io.stderr
 }
 local string = {
     match  = string.match,
@@ -17,9 +19,7 @@ local string = {
 local table = {
     insert = table.insert
 }
-local capi = {
-    widget = widget,
-}
+local wibox = require("wibox")
 local awful = require("awful")
 local lib = {
     hooks = require("obvious.lib.hooks"),
@@ -58,7 +58,7 @@ local function update(obj)
     if not status.mute then
         color = "#009000"
     end
-    obj.widget.text = lib.markup.fg.color(color, "☊") .. string.format(" %03d%%", status.volume)
+    obj.widget:set_markup(lib.markup.fg.color(color, "☊") .. string.format(" %03d%%", status.volume))
 end
 
 local function update_by_values(cardid, channel)
@@ -94,18 +94,15 @@ local function create(_, cardid, channel)
     local cardid = cardid or 0
     local channel = channel or "Master"
 
-    local obj = {
-        cardid = cardid,
-        channel = channel,
-        term = "x-terminal-emulator -T Mixer"
-    }
-
-    local widget = capi.widget({ type  = "textbox" })
-    obj.widget = widget
-    obj[1] = widget
+    local w = wibox.widget.textbox()
+    local obj = wibox.widget.base.make_widget(w)
+    obj.widget = w
+    obj.cardid = cardid
+    obj.channel = channel
+    obj.term = "xterm"
     obj.update = function() update(obj) end
 
-    widget:buttons(awful.util.table.join(
+    obj:buttons(awful.util.table.join(
         awful.button({ }, 4, function () raise(obj.cardid, obj.channel, 1) obj.update() end),
         awful.button({ }, 5, function () lower(obj.cardid, obj.channel, 1) obj.update() end),
         awful.button({ "Shift" }, 4, function () raise(obj.cardid, obj.channel, 10) obj.update() end),

@@ -14,7 +14,7 @@
 local setmetatable = setmetatable
 local pairs = pairs
 local ipairs = ipairs
-local widget = widget
+local wibox = require("wibox")
 local io = {
     popen = io.popen
 }
@@ -27,7 +27,7 @@ local lib = {
 local defaults = {}
 defaults.layouts = {}
 defaults.menu = nil
-defaults.widget = widget({ type = "textbox" })
+defaults.widget = wibox.widget.textbox()
 defaults.widget.text = "..."
 
 -- Clone the defaults to the used settings

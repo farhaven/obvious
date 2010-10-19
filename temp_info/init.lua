@@ -9,9 +9,7 @@ local tonumber = tonumber
 local table = {
    insert = table.insert
 }
-local capi = {
-   widget = widget
-}
+local wibox = require("wibox")
 local lib = {
    markup = require("obvious.lib.markup"),
    hooks = require("obvious.lib.hooks")
@@ -19,7 +17,7 @@ local lib = {
 
 module("obvious.temp_info")
 
-local widget = capi.widget({ type = "textbox" })
+local widget = wibox.widget.textbox()
 
 local colors = {
    ["normal"] = "#009000",

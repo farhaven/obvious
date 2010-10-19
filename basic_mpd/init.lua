@@ -6,10 +6,10 @@
 local setmetatable = setmetatable
 local pairs = pairs
 local type = type
-local widget = widget
 local string = string
 local awful = require("awful")
 local naughty = require("naughty")
+local wibox = require("wibox")
 local lib = {
         mpd = require("obvious.lib.mpd"),
         markup = require("obvious.lib.markup"),
@@ -28,9 +28,7 @@ for key, value in pairs(defaults) do
         settings[key] = value
 end
 
-local widget = widget({ type = "textbox",
-                        name = "mpd-playing",
-                        align = "left" })
+local widget = wibox.widget.textbox()
 
 connection = lib.mpd.new()
 

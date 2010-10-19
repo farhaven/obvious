@@ -19,6 +19,7 @@ local capi = {
 
 local naughty = require("naughty")
 local awful = require("awful")
+local wibox = require("wibox")
 local lib = {
     hooks = require("obvious.lib.hooks"),
     markup = require("obvious.lib.markup")
@@ -26,11 +27,8 @@ local lib = {
 
 module("obvious.battery")
 
-widget = capi.widget({
-    type = "textbox",
-    name = "tb_battery",
-    align = "right"
-})
+widget = wibox.widget.textbox()
+
 status = {
     ["charged"] = "↯",
     ["full"] = "↯",
@@ -132,12 +130,12 @@ local function update()
 
     local bat = get_data()
     if not bat then
-        widget.text = "no data"
+        widget:set_markup("no data")
         return
     end
     local color = "#900000"
     if not bat.charge then
-        widget.text = lib.markup.fg.color("#009000", status.charged) .. " A/C"
+        widget:set_markup(lib.markup.fg.color("#009000", status.charged) .. " A/C")
         return
     elseif bat.charge > 35 and bat.charge < 60 then
         color = "#909000"
@@ -157,7 +155,7 @@ local function update()
         battery_status = battery_status .. " " .. awful.util.escape(bat.time)
     end
 
-    widget.text = battery_status
+    widget:set_markup(battery_status)
 end
 
 local function detail ()

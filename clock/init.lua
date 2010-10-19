@@ -8,6 +8,7 @@ local print = print
 local setmetatable = setmetatable
 local tonumber = tonumber
 local type = type
+local wibox = require("wibox")
 local os = {
     date = os.date,
     getenv = os.getenv
@@ -22,7 +23,6 @@ local table = {
     insert = table.insert
 }
 local capi = {
-    widget = widget,
     mouse = mouse,
     screen = screen
 }
@@ -65,11 +65,7 @@ local alarmfile = awful.util.getdir("config").."/alarms"
 local fulldate = false
 local alarms = { }
 
-local widget = capi.widget({
-        type = "textbox",
-        name = "clock",
-        align = "right"
-    })
+local widget = wibox.widget.textbox()
 
 widget:buttons(awful.util.table.join(
     awful.button({ }, 3, function ()
@@ -148,7 +144,7 @@ local function update (trigger_alarms)
         widget.bg = beautiful.bg_normal
     end
 
-    widget.text = date
+    widget:set_markup(date)
 
     if trigger_alarms then
         local data = read_alarms(alarmfile)
