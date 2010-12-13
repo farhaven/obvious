@@ -97,6 +97,7 @@ function get_data()
         local line = fd:read("*l")
         while line do
             local data = line:match("Battery #?[0-9] *: ([^\n]*)")
+            if not data then return rv end
 
             rv.state = data:match("([%a]*),.*"):lower()
             rv.charge = tonumber(data:match(".*, ([%d]?[%d]?[%d]%.?[%d]?[%d]?)%%"))
@@ -108,6 +109,20 @@ function get_data()
 
         fd:close()
 
+        if backend ~= "acpi" or rv.state ~= "unknown" then
+            return rv
+        end
+
+        fd = io.popen(backend .. " -a")
+        line = fd:read("*l")
+        while line do
+            local data = line:match("Adapter #?[0-9] *: ([^\n]*)")
+            if not data then return rv end
+
+            rv.state = data
+            line = fd:read("*l")
+        end
+        if rv.state == "on-line" then rv.state = "charged" end
         return rv
     elseif backend == "apm" then
         local fd = io.popen("apm")
