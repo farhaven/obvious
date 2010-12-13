@@ -48,15 +48,15 @@ local function init()
         return
     end
 
-    local rv = os.execute("acpitool")
-    if rv == 0 then
-        backend = "acpitool"
-        return
-    end
-
     rv = os.execute("acpi")
     if rv == 0 then
         backend = "acpi"
+        return
+    end
+
+    local rv = os.execute("acpitool")
+    if rv == 0 then
+        backend = "acpitool"
         return
     end
 
